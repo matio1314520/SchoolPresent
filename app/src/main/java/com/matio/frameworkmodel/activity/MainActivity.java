@@ -5,10 +5,10 @@ import android.widget.RadioGroup;
 
 import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.base.BaseActivity;
-import com.matio.frameworkmodel.fragment.HomeFragment;
+import com.matio.frameworkmodel.fragment.GuideFragment;
 import com.matio.frameworkmodel.fragment.MeFragment;
-import com.matio.frameworkmodel.fragment.SecondFragment;
-import com.matio.frameworkmodel.fragment.ThirdFragment;
+import com.matio.frameworkmodel.fragment.HotFragment;
+import com.matio.frameworkmodel.fragment.CategoryFragment;
 import com.matio.frameworkmodel.utils.FragmentUtils;
 
 import org.xutils.view.annotation.ContentView;
@@ -27,9 +27,12 @@ public class MainActivity extends BaseActivity implements FragmentUtils.OnRgsExt
 
         ArrayList<Fragment> fragmentList = new ArrayList<>();
 
-        fragmentList.add(HomeFragment.newInstance());
-        fragmentList.add(SecondFragment.newInstance());
-        fragmentList.add(ThirdFragment.newInstance());
+        fragmentList.add(GuideFragment.newInstance());
+
+        fragmentList.add(HotFragment.newInstance());
+
+        fragmentList.add(CategoryFragment.newInstance());
+
         fragmentList.add(MeFragment.newInstance());
 
         new FragmentUtils(getSupportFragmentManager(), fragmentList, R.id.container_activity_main, mMainRag, this);

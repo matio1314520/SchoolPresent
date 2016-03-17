@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="6dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/icon_item_fragment_hot"
+            android:layout_width="match_parent"
+            android:layout_height="170dp" />
+
+        <TextView
+            android:id="@+id/name_item_fragment_hot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/icon_item_fragment_hot"
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="10dp"
+            android:text="ssssssssssss"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/price_item_fragment_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="sssssssssssssssssss"
+                android:textColor="@android:color/holo_red_light"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/love_item_fragment_hot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"
+                android:text="4.6k" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:layout_toLeftOf="@id/love_item_fragment_hot"
+                android:src="@mipmap/ic_small_heart_selected" />
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

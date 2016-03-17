@@ -19,24 +19,24 @@
         android:orientation="horizontal">
 
         <RadioButton
-            style="@style/MainRadioutton"
-            android:drawableTop="@drawable/home_radiobutton_activity_main"
-            android:text="@string/home_activity_main" />
+            style="@style/MainRadioGroup"
+            android:drawableTop="@drawable/guide_selector_radiobutton"
+            android:text="@string/guide" />
 
         <RadioButton
-            style="@style/MainRadioutton"
-            android:drawableTop="@drawable/second_radiobutton_activity_main"
-            android:text="二" />
+            style="@style/MainRadioGroup"
+            android:drawableTop="@drawable/hot_selector_radiobutton"
+            android:text="@string/hot" />
 
         <RadioButton
-            style="@style/MainRadioutton"
-            android:drawableTop="@drawable/third_radiobutton_activity_main"
-            android:text="三" />
+            style="@style/MainRadioGroup"
+            android:drawableTop="@drawable/category_selector_radiobutton"
+            android:text="@string/category" />
 
         <RadioButton
-            style="@style/MainRadioutton"
-            android:drawableTop="@drawable/me_radiobutton_activity_main"
-            android:text="我的" />
+            style="@style/MainRadioGroup"
+            android:drawableTop="@drawable/mine_selector_radiobutton"
+            android:text="@string/me" />
 
     </RadioGroup>
 

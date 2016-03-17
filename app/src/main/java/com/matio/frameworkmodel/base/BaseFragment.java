@@ -26,10 +26,28 @@ public abstract class BaseFragment extends Fragment {
 
         //用户操作
         onOperate();
+
+
+        //请求网络数据
+        requestNetData();
+
+        //设置适配器
+        setAdapter();
+    }
+
+
+    public void setAdapter() {
+
+    }
+
+    public void requestNetData() {
+
     }
 
     /**
      * 用户操作
      */
     public abstract void onOperate();
+
+
 }

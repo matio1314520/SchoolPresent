@@ -2,6 +2,8 @@ package com.matio.frameworkmodel.utils;
 
 import android.widget.ImageView;
 
+import com.matio.frameworkmodel.R;
+
 import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
@@ -50,6 +52,7 @@ public class HttpUtils {
 
     /**
      * post string
+     *
      * @param requestParams
      * @param callback
      */
@@ -93,10 +96,14 @@ public class HttpUtils {
      *
      * @param image
      * @param url
-     * @param options
      */
-    public static void setImage(ImageView image, String url, ImageOptions options) {
+    public static void setImage(ImageView image, String url) {
 
+        ImageOptions options = new ImageOptions.Builder()
+
+                .setLoadingDrawableId(R.mipmap.ic_holder_favourite)
+
+                .build();
         x.image().bind(image, url, options);
     }
 }

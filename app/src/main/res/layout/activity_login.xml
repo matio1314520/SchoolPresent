@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
+        android:src="@mipmap/btn_close" />
+
+    <ImageView
+
+        android:id="@+id/tel_login_layout"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="100dp"
+        android:src="@mipmap/icon_coupon" />
+
+    <EditText
+        android:id="@+id/tel_input_login"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:layout_toRightOf="@id/tel_login_layout"
+        android:hint="@string/inputtel" />
+
+
+    <ImageView
+        android:id="@+id/pwd_login_layout"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/tel_login_layout"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/icon_coupon" />
+
+
+    <EditText
+        android:id="@+id/pwd_input_login"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tel_login_layout"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@id/tel_login_layout"
+        android:hint="@string/pwdinput" />
+
+
+    <Button
+        android:id="@+id/login_layout"
+        android:layout_width="290dp"
+        android:layout_height="40dp"
+        android:layout_below="@id/pwd_input_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@android:color/holo_red_light"
+        android:text="@string/login"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/login_layout"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/loginyzm"
+        android:textColor="@android:color/holo_red_light" />
+
+    <TextView
+        android:id="@+id/loginother_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
+        android:text="@string/loginshejiao" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="106dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="10dp"
+        android:layout_toLeftOf="@id/loginother_layout"
+        android:background="@android:color/darker_gray" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="106dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_toRightOf="@id/loginother_layout"
+        android:background="@android:color/darker_gray" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:src="@mipmap/ic_share_wechat" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="50dp"
+        android:src="@mipmap/ic_share_sina_weibo" />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="50dp"
+        android:src="@mipmap/ic_share_tencent_qq" />
+
+</RelativeLayout>

@@ -1,10 +1,50 @@
 <resources>
-    <string name="app_name">FrameworkModel</string>
+    <string name="app_name">Present_Say</string>
 
-    <!--Main Activity-->
-    <string name="home_activity_main">首页</string>
-    <string name="second_activity_main">二</string>
-    <string name="third_activity_main">三</string>
-    <string name="me_activity_main">我的</string>
+    <string name="choose_sex">请选择你的性别</string>
+
+    <string name="boy_choose">男孩</string>
+
+    <string name="boy_choose_sex">男孩</string>
+
+
+    <string name="guide">指南</string>
+
+    <string name="hot">热门</string>
+
+    <string name="category">分类</string>
+
+    <string name="mine">我的</string>
+
+    <string name="singleproduct">单品</string>
+
+    <string name="presentsay">礼物说</string>
+
+    <string name="login_status">未登录</string>
+
+    <string name="mine_cart">购物车</string>
+
+    <string name="mine_order">订单</string>
+
+    <string name="mine_coupon">礼券</string>
+
+    <string name="mine_service">客服</string>
+
+    <string name="zhuanti">专题</string>
+
+    <string name="getall">查看全部</string>
+
+    <string name="getgift">选礼神器</string>
+
+    <string name="inputtel">输入手机号</string>
+
+    <string name="pwdinput">密码</string>
+
+    <string name="login">登录</string>
+
+    <string name="loginyzm">使用验证码登录</string>
+
+    <string name="loginshejiao">使用社交账号登录</string>
+    <string name="me">我的</string>
 
 </resources>

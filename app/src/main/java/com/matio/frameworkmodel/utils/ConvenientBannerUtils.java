@@ -21,21 +21,24 @@ public class ConvenientBannerUtils {
 
     public static void setBanner(ConvenientBanner banner, List<String> list) {
 
-        banner.setPages(new CBViewHolderCreator() {
-            @Override
-            public Object createHolder() {
-                return new ViewHolder();
-            }
-        }, list)
-                .setPageIndicator(new int[]{R.mipmap.btn_check_disabled_nightmode, R.mipmap.btn_check_disabled})
+        if (banner != null) {
+            banner.setPages(new CBViewHolderCreator() {
+                @Override
+                public Object createHolder() {
+                    return new ViewHolder();
+                }
+            }, list)
+                    .setPageIndicator(new int[]{R.mipmap.btn_check_disabled_nightmode, R.mipmap.btn_check_disabled})
 
-                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
-                .setScrollDuration(4 * 1000)
-        ;
+                    .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL)
 
+                    .setScrollDuration(4 * 1000);
+
+        }
     }
 
     static class ViewHolder implements Holder<String> {
+
         private ImageView imageView;
 
         @Override

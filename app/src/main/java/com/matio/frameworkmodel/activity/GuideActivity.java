@@ -12,7 +12,6 @@ import org.xutils.view.annotation.ContentView;
 @ContentView(R.layout.activity_guide)
 public class GuideActivity extends BaseActivity {
 
-
     @Override
     public void onOperate() {
 
