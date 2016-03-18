@@ -16,7 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/icon_gridview_category"
         android:layout_centerHorizontal="true"
-        android:text="ssss"
-        android:layout_marginTop="4dp" />
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="4dp"
+        android:text="ssss" />
 
 </RelativeLayout>

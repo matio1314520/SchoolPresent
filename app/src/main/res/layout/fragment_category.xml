@@ -11,28 +11,30 @@
 
         <RadioGroup
             android:id="@+id/rag_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/strategy_radiobutton_category"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:button="@null"
                 android:gravity="center"
+                android:layout_weight="1"
+                android:button="@null"
                 android:text="攻略"
                 android:textColor="@android:color/white"
                 android:textSize="18dp" />
 
             <RadioButton
                 android:id="@+id/gift_radiobutton_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:button="@null"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:gravity="center"
+                android:layout_weight="1"
+                android:button="@null"
                 android:text="礼物"
                 android:textColor="@android:color/white"
                 android:textSize="18dp" />

@@ -5,8 +5,8 @@
 
     <ImageView
         android:id="@+id/icon_gridview_category"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_centerHorizontal="true"
         android:src="@android:drawable/ic_dialog_email" />
 
@@ -17,6 +17,7 @@
         android:layout_below="@id/icon_gridview_category"
         android:layout_centerHorizontal="true"
         android:text="ssss"
+        android:layout_marginBottom="10dp"
         android:layout_marginTop="4dp" />
 
 </RelativeLayout>
