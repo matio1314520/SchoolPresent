@@ -57,6 +57,7 @@ public class HttpUtils {
      * @param callback
      */
     public static void post(RequestParams requestParams, final Callback callback) {
+
         x.http().post(requestParams, new org.xutils.common.Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -104,6 +105,7 @@ public class HttpUtils {
                 .setLoadingDrawableId(R.mipmap.ic_holder_favourite)
 
                 .build();
+
         x.image().bind(image, url, options);
     }
 }

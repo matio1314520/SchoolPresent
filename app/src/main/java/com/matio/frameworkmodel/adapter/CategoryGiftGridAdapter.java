@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.base.BaseAppAdapter;
 import com.matio.frameworkmodel.bean.CategoryGift;
+import com.matio.frameworkmodel.utils.HttpUtils;
 
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -40,7 +41,7 @@ public class CategoryGiftGridAdapter extends BaseAppAdapter {
 
         viewHolder.nameTxt.setText(subcategories.getName());
 
-        x.image().bind(viewHolder.iconImg, subcategories.getIcon_url());
+        HttpUtils.setImage(viewHolder.iconImg, subcategories.getIcon_url());
 
         return convertView;
     }

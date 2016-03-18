@@ -39,7 +39,9 @@ public class GuideHeaderFragment extends BaseFragment {
     private GuideRecyAdapter mRecyAdapter;
 
     public static GuideHeaderFragment newInstance() {
+
         GuideHeaderFragment fragment = new GuideHeaderFragment();
+
         return fragment;
     }
 
@@ -63,12 +65,13 @@ public class GuideHeaderFragment extends BaseFragment {
         requestRecyclerData();
     }
 
-
     @Override
     public void setAdapter() {
         super.setAdapter();
 
+        mRecyAdapter = new GuideRecyAdapter(getActivity(), mRecyList);
 
+        mHeaderRecyView.setAdapter(mRecyAdapter);
     }
 
     /**
@@ -84,11 +87,6 @@ public class GuideHeaderFragment extends BaseFragment {
 
                     mRecyList.addAll(guideRecycler.getData().getSecondary_banners());
                 }
-
-                mRecyAdapter = new GuideRecyAdapter(getActivity(), mRecyList);
-
-                mHeaderRecyView.setAdapter(mRecyAdapter);
-
                 mRecyAdapter.notifyDataSetChanged();
             }
         });

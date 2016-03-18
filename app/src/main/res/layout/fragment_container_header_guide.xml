@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <fragment
         android:id="@+id/container_header_fragment_guide"
         android:name="com.matio.frameworkmodel.fragment.GuideHeaderFragment"

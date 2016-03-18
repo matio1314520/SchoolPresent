@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.activity.LoginActivity;
+import com.matio.frameworkmodel.activity.ScanActivity;
 import com.matio.frameworkmodel.base.BaseFragment;
 
 import org.xutils.view.annotation.ContentView;
@@ -28,7 +29,7 @@ public class MeFragment extends BaseFragment {
     @ViewInject(R.id.content_mine)
     private TextView contentTxt;
 
-    @ViewInject(R.id.personal_fragment_mine)
+    @ViewInject(R.id.personal_fragment_me)
     private ImageView iconImg;
 
     public static MeFragment newInstance() {
@@ -43,22 +44,35 @@ public class MeFragment extends BaseFragment {
 
     }
 
-    @Event(value = {R.id.gift_img_mine, R.id.strategy_img_mine, R.id.personal_fragment_mine, R.id.scan_fragment_mine} )
+    @Event(value = {R.id.gift_img_mine, R.id.strategy_img_mine, R.id.personal_fragment_me, R.id.scan_fragment_me})
     private void onClick(View v) {
         switch (v.getId()) {
             case R.id.gift_img_mine:
+
                 setTextAndImg();
+
                 break;
+
             case R.id.strategy_img_mine:
+
                 contentTxt.setText("喜欢的攻略放在这里哦");
+
                 strategyImg.setVisibility(View.VISIBLE);
+
                 giftImg.setVisibility(View.INVISIBLE);
+
                 break;
-            case R.id.personal_fragment_mine:
+
+            case R.id.personal_fragment_me:
+
                 toAnotherPage();
+
                 break;
-            case R.id.scan_fragment_mine:
+
+            case R.id.scan_fragment_me:
+
                 scan();
+
                 break;
         }
     }
@@ -67,7 +81,7 @@ public class MeFragment extends BaseFragment {
      * 扫描二维码
      */
     private void scan() {
-
+        startActivity(new Intent(getActivity(), ScanActivity.class));
     }
 
 

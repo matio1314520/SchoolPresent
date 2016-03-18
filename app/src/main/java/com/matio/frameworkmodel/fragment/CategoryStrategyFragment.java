@@ -1,6 +1,5 @@
 package com.matio.frameworkmodel.fragment;
 
-
 import android.widget.ListView;
 
 import com.alibaba.fastjson.JSONObject;
