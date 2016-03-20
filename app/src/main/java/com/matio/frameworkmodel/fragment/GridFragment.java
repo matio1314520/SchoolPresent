@@ -1,6 +1,7 @@
 package com.matio.frameworkmodel.fragment;
 
 import android.os.Bundle;
+import android.widget.GridView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
@@ -9,6 +10,7 @@ import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.adapter.HotGridAdapter;
 import com.matio.frameworkmodel.base.BaseFragment;
 import com.matio.frameworkmodel.bean.HotGrid;
+import com.matio.frameworkmodel.bean.SearchGrid;
 import com.matio.frameworkmodel.common.HotConstant;
 import com.matio.frameworkmodel.utils.HttpUtils;
 
@@ -31,11 +33,23 @@ public class GridFragment extends BaseFragment implements HttpUtils.Callback {
 
     private static final int NUM_COLUMN = 2;
 
+    private static final int HORIZONTAL_SPACING = 6;
+
+    private static final int VERTICAL_SPACING = 10;
+
     private ArrayList<HotGrid.HotDataEntity.HotItems.HotData> mDataList = new ArrayList<>();
 
-    public static GridFragment newInstance() {
+    private ArrayList<SearchGrid.DataEntity.ItemsEntity> mItemList = new ArrayList<>();
+
+    private String mKeyword;
+
+    private static final String KEYWORD = "keyword";
+
+    public static GridFragment newInstance(String keyword) {
 
         Bundle args = new Bundle();
+
+        args.putString(KEYWORD, keyword);
 
         GridFragment fragment = new GridFragment();
 
@@ -49,42 +63,73 @@ public class GridFragment extends BaseFragment implements HttpUtils.Callback {
 
     }
 
-
     @Override
     public void requestNetData() {
         super.requestNetData();
 
-        HttpUtils.get(HotConstant.GRID_URL_GET, this);
+        if (mKeyword != null) {
+
+            HttpUtils.get("http://api.liwushuo.com/v2/search/item?limit=20&offset=0&sort=&keyword=" + mKeyword, this);
+
+        } else {
+
+            HttpUtils.get(HotConstant.GRID_URL_GET, this);
+        }
     }
 
     @Override
     public void setAdapter() {
         super.setAdapter();
 
-        mHotAdapter = new HotGridAdapter(getActivity(), mDataList);
+        if (mKeyword != null) {
 
-        mPtreGiv.setMode(PullToRefreshBase.Mode.BOTH);
+            mHotAdapter = new HotGridAdapter(getActivity(), mDataList, true);
 
-        mPtreGiv.getRefreshableView().setNumColumns(NUM_COLUMN);
+        } else {
 
-        mPtreGiv.getRefreshableView().setAdapter(mHotAdapter);
+            mHotAdapter = new HotGridAdapter(getActivity(), mDataList);
+
+            mPtreGiv.setMode(PullToRefreshBase.Mode.BOTH);
+        }
+
+        GridView refreshableView = mPtreGiv.getRefreshableView();
+
+        refreshableView.setNumColumns(NUM_COLUMN);
+
+        refreshableView.setHorizontalSpacing(HORIZONTAL_SPACING);
+
+        refreshableView.setVerticalSpacing(VERTICAL_SPACING);
+
+        refreshableView.setAdapter(mHotAdapter);
     }
-
 
     @Override
     public void get(String result) {
 
-        HotGrid hotGrid = JSONObject.parseObject(result, HotGrid.class);
+        if (mKeyword != null) {
 
-        if (hotGrid != null) {
+            SearchGrid gridCom = JSONObject.parseObject(result, SearchGrid.class);
 
-            List<HotGrid.HotDataEntity.HotItems> hotItemsList = hotGrid.getData().getItems();
+            if (gridCom != null) {
 
-            for (HotGrid.HotDataEntity.HotItems items : hotItemsList) {
+                mItemList.addAll(gridCom.getData().getItems());
 
-                mDataList.add(items.getData());
+                mHotAdapter.notifyDataSetChanged();
             }
-            mHotAdapter.notifyDataSetChanged();
+        } else {
+
+            HotGrid hotGrid = JSONObject.parseObject(result, HotGrid.class);
+
+            if (hotGrid != null) {
+
+                List<HotGrid.HotDataEntity.HotItems> hotItemsList = hotGrid.getData().getItems();
+
+                for (HotGrid.HotDataEntity.HotItems items : hotItemsList) {
+
+                    mDataList.add(items.getData());
+                }
+                mHotAdapter.notifyDataSetChanged();
+            }
         }
     }
 }

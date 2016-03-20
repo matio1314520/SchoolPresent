@@ -5,12 +5,10 @@ package com.matio.frameworkmodel.common;
  */
 public class GuideConstant {
 
-
     /**
      * tablayout
      */
     public static final String TAB_URL_GET = "http://api.liwushuo.com/v2/channels/preset?gender=1&generation=4";
-
 
     /**
      * banner
@@ -25,11 +23,13 @@ public class GuideConstant {
     /**
      * PullToRefreshListView
      */
-    public static final String HEADER_URL_GET = "http://api.liwushuo.com/v2/channels/";
-    /**
-     * id
-     */
-    public static final String FOOTER_URL_GET = "/items?limit=20&offset=0&gender=1&generation=4";
+    public static final String HEADER_URL_GET = "http://api.liwushuo.com/v2/channels/108/items?limit=20&offset=";
 
+
+    public static final String FOOTER_URL_GET = "&gender=1&generation=4";
+
+    //http://api.liwushuo.com/v2/channels/108/items?limit=20&ad=2&gender=1&offset=20&generation=4
+    //http://api.liwushuo.com/v2/channels/108/items?limit=20&ad=2&gender=1&offset=40&generation=4
+    //http://api.liwushuo.com/v2/channels/108/items?limit=20&ad=2&gender=1&offset=60&generation=4
 
 }

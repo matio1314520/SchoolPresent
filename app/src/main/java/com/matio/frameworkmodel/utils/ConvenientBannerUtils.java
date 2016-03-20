@@ -54,6 +54,4 @@ public class ConvenientBannerUtils {
             x.image().bind(imageView, data);
         }
     }
-
-
 }

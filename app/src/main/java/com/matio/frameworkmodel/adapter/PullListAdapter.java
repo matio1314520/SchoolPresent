@@ -8,7 +8,8 @@ import android.widget.TextView;
 
 import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.base.BaseAppAdapter;
-import com.matio.frameworkmodel.bean.PullList;
+import com.matio.frameworkmodel.bean.GuideList;
+import com.matio.frameworkmodel.bean.SearchList;
 
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -20,8 +21,16 @@ import java.util.List;
  */
 public class PullListAdapter extends BaseAppAdapter {
 
+    private boolean mYes;
+
     public PullListAdapter(Context context, List list) {
         super(context, list);
+
+    }
+
+    public PullListAdapter(Context context, List list, boolean yes) {
+        this(context, list);
+        this.mYes = yes;
     }
 
     @Override
@@ -40,17 +49,32 @@ public class PullListAdapter extends BaseAppAdapter {
 
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        if (mList != null) {
 
-            PullList.DataEntity.ItemsEntity item = (PullList.DataEntity.ItemsEntity) mList.get(position);
+        if (mYes) {
+            SearchList.DataEntity.PostsEntity post = (SearchList.DataEntity.PostsEntity) mList.get(position);
 
-            if (item != null) {
+            if (post != null) {
 
-                x.image().bind(viewHolder.contentImg, item.getCover_image_url());
+                x.image().bind(viewHolder.contentImg, post.getCover_image_url());
 
-                viewHolder.favoriteTxt.setText("" + item.getLikes_count());
+                viewHolder.favoriteTxt.setText("" + post.getLikes_count());
 
-                viewHolder.titleTxt.setText(item.getTitle());
+                viewHolder.titleTxt.setText(post.getTitle());
+            }
+
+        } else {
+            if (mList != null) {
+
+                GuideList.DataEntity.ItemsEntity item = (GuideList.DataEntity.ItemsEntity) mList.get(position);
+
+                if (item != null) {
+
+                    x.image().bind(viewHolder.contentImg, item.getCover_image_url());
+
+                    viewHolder.favoriteTxt.setText("" + item.getLikes_count());
+
+                    viewHolder.titleTxt.setText(item.getTitle());
+                }
             }
         }
         return convertView;

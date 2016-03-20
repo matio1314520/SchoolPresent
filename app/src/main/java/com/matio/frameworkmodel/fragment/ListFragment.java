@@ -8,7 +8,8 @@ import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.adapter.PullListAdapter;
 import com.matio.frameworkmodel.base.BaseFragment;
-import com.matio.frameworkmodel.bean.PullList;
+import com.matio.frameworkmodel.bean.GuideList;
+import com.matio.frameworkmodel.bean.SearchList;
 import com.matio.frameworkmodel.common.GuideConstant;
 import com.matio.frameworkmodel.utils.HttpUtils;
 
@@ -28,17 +29,25 @@ public class ListFragment extends BaseFragment implements HttpUtils.Callback {
 
     public static final String ID = "id";
 
-    private ArrayList<PullList.DataEntity.ItemsEntity> mItemList = new ArrayList<>(); //数据源
+    private ArrayList<GuideList.DataEntity.ItemsEntity> mItemList = new ArrayList<>(); //数据源
 
     private String mId;  //id
 
+    private String mKeyword;
+
     private PullListAdapter mListAdapter; // 适配器
 
-    public static ListFragment newInstance(int id) {
+    private final static String KEYWORD = "keyword";
+
+    private ArrayList<SearchList.DataEntity.PostsEntity> mPostList = new ArrayList<>();
+
+    public static ListFragment newInstance(int id, String keyword) {
 
         Bundle args = new Bundle();
 
         args.putInt(ID, id);
+
+        args.putString(KEYWORD, keyword);
 
         ListFragment fragment = new ListFragment();
 
@@ -60,7 +69,13 @@ public class ListFragment extends BaseFragment implements HttpUtils.Callback {
     public void requestNetData() {
         super.requestNetData();
 
-        HttpUtils.get(getUrl(), this);
+        if (mKeyword != null) {
+            HttpUtils.get("http://api.liwushuo.com/v2/search/post?limit=20&offset=0&sort=&keyword=" + mKeyword, this);
+
+        } else {
+
+            HttpUtils.get(getUrl(), this);
+        }
     }
 
 
@@ -68,11 +83,17 @@ public class ListFragment extends BaseFragment implements HttpUtils.Callback {
     public void setAdapter() {
         super.setAdapter();
 
-        mListAdapter = new PullListAdapter(getActivity(),mItemList);
+        if (mKeyword != null){
 
-        mPtrLv.setMode(PullToRefreshBase.Mode.BOTH);
+            mListAdapter = new PullListAdapter(getActivity(), mItemList,true);
+        }else {
 
-        mPtrLv.getRefreshableView().setAdapter(mListAdapter);
+            mListAdapter = new PullListAdapter(getActivity(), mItemList);
+
+            mPtrLv.setMode(PullToRefreshBase.Mode.BOTH);
+
+            mPtrLv.getRefreshableView().setAdapter(mListAdapter);
+        }
     }
 
     /**
@@ -83,6 +104,8 @@ public class ListFragment extends BaseFragment implements HttpUtils.Callback {
         if (getArguments() != null) {
 
             mId = getArguments().getInt(ID) + "";
+
+            mKeyword = getArguments().getString(KEYWORD);
         }
     }
 
@@ -101,16 +124,27 @@ public class ListFragment extends BaseFragment implements HttpUtils.Callback {
 
     @Override
     public void get(String result) {
+        if (mKeyword != null) {
 
-        PullList pull = JSONObject.parseObject(result, PullList.class);
+            SearchList search = JSONObject.parseObject(result, SearchList.class);
 
-        if (pull != null) {
+            if (search != null) {
 
-            //添加数据
-            mItemList.addAll(pull.getData().getItems());
+                mPostList.addAll(search.getData().getPosts());
+            }
 
-            //唤醒
-            mListAdapter.notifyDataSetChanged();
+        } else {
+
+            GuideList guide = JSONObject.parseObject(result, GuideList.class);
+
+            if (guide != null) {
+
+                //添加数据
+                mItemList.addAll(guide.getData().getItems());
+
+                //唤醒
+                mListAdapter.notifyDataSetChanged();
+            }
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.matio.frameworkmodel.fragment;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.matio.frameworkmodel.R;
+import com.matio.frameworkmodel.activity.SearchActivity;
 import com.matio.frameworkmodel.adapter.GuidePagerAdapter;
 import com.matio.frameworkmodel.base.BaseFragment;
 import com.matio.frameworkmodel.bean.GuideTab;
@@ -25,7 +26,7 @@ import java.util.List;
  * Created by Angel on 2016/2/19.
  */
 @ContentView(R.layout.fragment_guide)
-public class GuideFragment extends BaseFragment  implements HttpUtils.Callback  {
+public class GuideFragment extends BaseFragment implements HttpUtils.Callback {
 
     @ViewInject(R.id.vip_fragment_guide)
     private ViewPager mGuideVip;
@@ -39,17 +40,14 @@ public class GuideFragment extends BaseFragment  implements HttpUtils.Callback  
 
     public static GuideFragment newInstance() {
 
-        Bundle args = new Bundle();
-
         GuideFragment fragment = new GuideFragment();
-
-        fragment.setArguments(args);
 
         return fragment;
     }
 
     @Override
     public void onOperate() {
+
 
         HttpUtils.get(GuideConstant.TAB_URL_GET, this);
     }
@@ -65,14 +63,18 @@ public class GuideFragment extends BaseFragment  implements HttpUtils.Callback  
         switch (view.getId()) {
 
             case R.id.signin_fragment_guide:
+                //日历
 
                 break;
 
             case R.id.changenight_fragment_guide:
+                //夜晚模式 白昼模式
 
                 break;
 
             case R.id.search_fragment_guide:
+                //页面跳转
+                startActivity(new Intent(getActivity(), SearchActivity.class));
 
                 break;
         }
@@ -95,15 +97,13 @@ public class GuideFragment extends BaseFragment  implements HttpUtils.Callback  
                     //添加数据
                     mTitleList.add(channelList.get(i).getName());
 
-                    int id = channelList.get(i).getId();
-
                     if (i == 0) {
 
-                        mFragmentList.add(ExpandableFragment.newInstance(id));
+                        mFragmentList.add(ExpandableFragment.newInstance());
 
                     } else {
 
-                        mFragmentList.add(ListFragment.newInstance(id));
+                        mFragmentList.add(ListFragment.newInstance(channelList.get(i).getId(), null));
                     }
                 }
 

@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.matio.frameworkmodel.R;
-import com.matio.frameworkmodel.bean.PullList;
+import com.matio.frameworkmodel.bean.GuideList;
 import com.matio.frameworkmodel.utils.HttpUtils;
 
 import org.xutils.view.annotation.ViewInject;
@@ -24,7 +24,7 @@ import java.util.Map;
  */
 public class ExpandableAdapter extends BaseExpandableListAdapter {
 
-    private Map<String, List<PullList.DataEntity.ItemsEntity>> mItemMap;
+    private Map<String, List<GuideList.DataEntity.ItemsEntity>> mItemMap;
 
     private ArrayList<String> mTilteList;
 
@@ -32,7 +32,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
     private LayoutInflater mInflater;
 
-    public ExpandableAdapter(Context context, ArrayList<String> tilteList, Map<String, List<PullList.DataEntity.ItemsEntity>> itemMap) {
+    public ExpandableAdapter(Context context, ArrayList<String> tilteList, Map<String, List<GuideList.DataEntity.ItemsEntity>> itemMap) {
         this.mItemMap = itemMap;
         this.mContext = context;
         this.mTilteList = tilteList;
@@ -128,7 +128,7 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         if (mItemMap != null && mTilteList != null) {
 
-            PullList.DataEntity.ItemsEntity item =  mItemMap.get(mTilteList.get(groupPosition)).get(childPosition);
+            GuideList.DataEntity.ItemsEntity item =  mItemMap.get(mTilteList.get(groupPosition)).get(childPosition);
 
             if (item != null) {
 

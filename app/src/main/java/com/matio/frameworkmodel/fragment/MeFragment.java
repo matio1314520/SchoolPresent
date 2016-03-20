@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.activity.LoginActivity;
-import com.matio.frameworkmodel.activity.ScanActivity;
+import com.matio.frameworkmodel.activity.CaptureActivity;
 import com.matio.frameworkmodel.base.BaseFragment;
 
 import org.xutils.view.annotation.ContentView;
@@ -81,7 +81,7 @@ public class MeFragment extends BaseFragment {
      * 扫描二维码
      */
     private void scan() {
-        startActivity(new Intent(getActivity(), ScanActivity.class));
+        startActivity(new Intent(getActivity(), CaptureActivity.class));
     }
 
 

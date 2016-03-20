@@ -1,12 +1,14 @@
 package com.matio.frameworkmodel.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.matio.frameworkmodel.R;
+import com.matio.frameworkmodel.activity.CategoryChildActivity;
 import com.matio.frameworkmodel.base.BaseAppAdapter;
 import com.matio.frameworkmodel.bean.CategoryStrategy;
 import com.matio.frameworkmodel.widget.CustomGridView;
@@ -59,12 +61,12 @@ public class CategoryStrategyListAdapter extends BaseAppAdapter implements Adapt
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int subPosition, long id) {
-//
-//        Intent intent = new Intent(mContext, CategoryChildActivity.class);
-//
-//        intent.putExtra("id", mGroupList.getChannels().get(subPosition).getId());
-//
-//        mContext.startActivity(intent);
+
+        Intent intent = new Intent(mContext, CategoryChildActivity.class);
+
+        intent.putExtra("id", mGroupList.getChannels().get(subPosition).getId());
+
+        mContext.startActivity(intent);
     }
 
 

@@ -38,7 +38,9 @@ public class GuideRecyAdapter extends RecyclerView.Adapter<GuideRecyAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         if (mList != null) {
+
             final GuideRecycler.DataEntity.SecondaryBannersEntity banner = mList.get(position);
+
 
             x.image().bind(holder.iconView, banner.getImage_url());
 
@@ -58,6 +60,7 @@ public class GuideRecyAdapter extends RecyclerView.Adapter<GuideRecyAdapter.View
 
     @Override
     public int getItemCount() {
+
         return mList != null ? mList.size() : 0;
     }
 

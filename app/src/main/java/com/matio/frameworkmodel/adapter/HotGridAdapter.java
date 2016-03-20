@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.base.BaseAppAdapter;
 import com.matio.frameworkmodel.bean.HotGrid;
+import com.matio.frameworkmodel.bean.SearchGrid;
 
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -20,8 +21,15 @@ import java.util.List;
  */
 public class HotGridAdapter extends BaseAppAdapter {
 
+    private boolean mYes;
+
     public HotGridAdapter(Context context, List list) {
         super(context, list);
+    }
+
+    public HotGridAdapter(Context context, List list, boolean yes) {
+        this(context, list);
+        this.mYes = yes;
     }
 
     @Override
@@ -37,26 +45,54 @@ public class HotGridAdapter extends BaseAppAdapter {
 
         if (mList != null) {
 
-            HotGrid.HotDataEntity.HotItems.HotData data = (HotGrid.HotDataEntity.HotItems.HotData) mList.get(position);
-            if (data != null) {
-                viewHolder.priceTxt.setText(data.getPrice());
+            if (mYes) {
 
-                viewHolder.nameTxt.setText(data.getName());
+                SearchGrid.DataEntity.ItemsEntity data = (SearchGrid.DataEntity.ItemsEntity) mList.get(position);
 
-                String favorites_count = data.getFavorites_count();
+                if (data != null) {
+                    viewHolder.priceTxt.setText(data.getPrice());
 
-                int fc = Integer.parseInt(favorites_count);
+                    viewHolder.nameTxt.setText(data.getName());
 
-                if (fc < 1000) {
+                    String favorites_count = data.getFavorites_count();
 
-                    viewHolder.loveTxt.setText(favorites_count);
+                    int fc = Integer.parseInt(favorites_count);
 
-                } else {
+                    if (fc < 1000) {
 
-                    viewHolder.loveTxt.setText(fc / 100 / 10 + "." + fc / 100 % 10 + "k");
+                        viewHolder.loveTxt.setText(favorites_count);
+
+                    } else {
+
+                        viewHolder.loveTxt.setText(fc / 100 / 10 + "." + fc / 100 % 10 + "k");
+                    }
+
+                    x.image().bind(viewHolder.iconImg, data.getCover_image_url());
                 }
 
-                x.image().bind(viewHolder.iconImg, data.getCover_image_url());
+            } else {
+                HotGrid.HotDataEntity.HotItems.HotData data = (HotGrid.HotDataEntity.HotItems.HotData) mList.get(position);
+                if (data != null) {
+                    viewHolder.priceTxt.setText(data.getPrice());
+
+                    viewHolder.nameTxt.setText(data.getName());
+
+                    String favorites_count = data.getFavorites_count();
+
+                    int fc = Integer.parseInt(favorites_count);
+
+                    if (fc < 1000) {
+
+                        viewHolder.loveTxt.setText(favorites_count);
+
+                    } else {
+
+                        viewHolder.loveTxt.setText(fc / 100 / 10 + "." + fc / 100 % 10 + "k");
+                    }
+
+                    x.image().bind(viewHolder.iconImg, data.getCover_image_url());
+                }
+
             }
         }
         return convertView;

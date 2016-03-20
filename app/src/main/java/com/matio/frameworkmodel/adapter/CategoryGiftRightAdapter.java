@@ -44,6 +44,7 @@ public class CategoryGiftRightAdapter extends BaseAppAdapter {
         CategoryGift.CategoryGiftData.CategoryGiftCategories categories = (CategoryGift.CategoryGiftData.CategoryGiftCategories) mList.get(position);
 
         if (categories != null) {
+
             viewHoler.nameTxt.setText(categories.getName());
         }
 
@@ -53,7 +54,6 @@ public class CategoryGiftRightAdapter extends BaseAppAdapter {
 
         return convertView;
     }
-
 
    private class ViewHoler {
 

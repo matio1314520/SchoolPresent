@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by Angel on 2016/3/17.
  */
-public class PullList implements Serializable {
+public class GuideList implements Serializable {
 
     /**
      * code : 200

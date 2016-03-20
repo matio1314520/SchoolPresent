@@ -1,22 +1,32 @@
 package com.matio.frameworkmodel.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bigkoo.convenientbanner.ConvenientBanner;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.adapter.ExpandableAdapter;
+import com.matio.frameworkmodel.adapter.GuideRecyAdapter;
 import com.matio.frameworkmodel.base.BaseFragment;
-import com.matio.frameworkmodel.bean.PullList;
+import com.matio.frameworkmodel.bean.GuideBanner;
+import com.matio.frameworkmodel.bean.GuideList;
+import com.matio.frameworkmodel.bean.GuideRecycler;
 import com.matio.frameworkmodel.common.GuideConstant;
+import com.matio.frameworkmodel.utils.ConvenientBannerUtils;
 import com.matio.frameworkmodel.utils.HttpUtils;
 
 import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,26 +39,36 @@ import java.util.Map;
  * Created by Angel on 2016/3/17.
  */
 @ContentView(R.layout.fragment_expandable)
-public class ExpandableFragment extends BaseFragment implements HttpUtils.Callback, ExpandableListView.OnGroupClickListener {
-
-    public static final String ID = "id";
+public class ExpandableFragment extends BaseFragment implements HttpUtils.Callback, ExpandableListView.OnGroupClickListener, PullToRefreshBase.OnRefreshListener2<ExpandableListView> {
 
     @ViewInject(R.id.ptrelistview_fragment_expandable)
     private PullToRefreshExpandableListView mPtreLv;
 
-    private String mId;
-
     private ExpandableAdapter mExpandableAdapter;
 
-    private Map<String, List<PullList.DataEntity.ItemsEntity>> mItemMap = new HashMap<>();
+    private Map<String, List<GuideList.DataEntity.ItemsEntity>> mItemMap = new HashMap<>();
 
-    private ArrayList<String> mTitleList = new ArrayList<>();
+    private ArrayList<String> mTitleList = new ArrayList<>(); //
 
-    public static ExpandableFragment newInstance(int id) {
+    private View mHeaderView;  //头部
+
+    private ViewHolder mViewHolder;
+
+    private ArrayList<GuideRecycler.DataEntity.SecondaryBannersEntity> mRecyList = new ArrayList<>();
+
+    private ArrayList<GuideBanner.DataEntity.BannersEntity> mBannerList = new ArrayList(); // banner数据源
+
+    private ArrayList<String> mBannerUrlList = new ArrayList<>(); //banner 图片地址
+
+    private GuideRecyAdapter mRecyAdapter;
+
+    private int START_OFFSET = 0;
+
+    private int ADD_OFFSET = 20;
+
+    public static ExpandableFragment newInstance() {
 
         Bundle args = new Bundle();
-
-        args.putInt(ID, id);
 
         ExpandableFragment fragment = new ExpandableFragment();
 
@@ -60,17 +80,139 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
     @Override
     public void onOperate() {
 
-        //从bundle中获取传值
-        getDataFromBundle();
+        mPtreLv.setOnRefreshListener(this);
 
-        mPtreLv.getRefreshableView().addHeaderView(LayoutInflater.from(getActivity()).inflate(R.layout.fragment_container_header_guide, null));
+        //加载头部布局
+        mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_header_guide, null);
+
+        mViewHolder = new ViewHolder(mHeaderView);
+
+        //添加头部
+        mPtreLv.getRefreshableView().addHeaderView(mHeaderView);
+
+        if (mViewHolder.mHeaderBanner != null) {
+            //开始轮播
+            mViewHolder.mHeaderBanner.stopTurning();
+        }
+    }
+
+    @Event(value = {R.id.ptrelistview_fragment_expandable}, type = AdapterView.OnItemClickListener.class)
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    /**
+     * 下拉刷新
+     *
+     * @param refreshView
+     */
+    @Override
+    public void onPullDownToRefresh(PullToRefreshBase<ExpandableListView> refreshView) {
+
+        if (mTitleList != null && mItemMap != null) {
+
+            mTitleList.clear();
+            mItemMap.clear();
+        }
+
+        START_OFFSET = 0;
+
+        requestListData(START_OFFSET);
+    }
+
+    /**
+     * 上拉加载
+     *
+     * @param refreshView
+     */
+    @Override
+    public void onPullUpToRefresh(PullToRefreshBase<ExpandableListView> refreshView) {
+
+        START_OFFSET += ADD_OFFSET;
+
+        requestListData(START_OFFSET);
+    }
+
+    private class ViewHolder {
+
+        @ViewInject(R.id.convenientBanner_header_guide)
+        private ConvenientBanner mHeaderBanner;
+
+        @ViewInject(R.id.recyclerview_fragment_guideheader)
+        private RecyclerView mHeaderRecyView;
+
+        public ViewHolder(View view) {
+            x.view().inject(this, view);
+        }
     }
 
     @Override
     public void requestNetData() {
         super.requestNetData();
 
-        HttpUtils.get(getUrl(), this);
+        //获取listview数据
+        requestListData(START_OFFSET);
+
+        //请求banner数据
+        requestBannerData();
+
+        //请求recyclerview数据
+        requestRecyclerData();
+    }
+
+    /**
+     * 获取listview数据
+     */
+    private void requestListData(int offset) {
+        //PullToRefreshExpandableListView
+        HttpUtils.get(getUrl(offset), this);
+    }
+
+    /**
+     * 获取RecyclerView数据
+     */
+    private void requestRecyclerData() {
+
+        HttpUtils.get(GuideConstant.RECYCLER_URL_GET, new HttpUtils.Callback() {
+            @Override
+            public void get(String result) {
+
+                GuideRecycler guideRecycler = JSONObject.parseObject(result, GuideRecycler.class);
+
+                if (guideRecycler != null) {
+
+                    mRecyList.addAll(guideRecycler.getData().getSecondary_banners());
+                }
+
+                mRecyAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    /**
+     * 获取广告头数据
+     */
+    private void requestBannerData() {
+        HttpUtils.get(GuideConstant.BANNER_URL_GET, new HttpUtils.Callback() {
+            @Override
+            public void get(String result) {
+
+                if (result != null) {
+                    GuideBanner guideBanner = JSONObject.parseObject(result, GuideBanner.class);
+                    if (guideBanner != null) {
+
+                        mBannerList.addAll(guideBanner.getData().getBanners());
+
+                        for (GuideBanner.DataEntity.BannersEntity banner : guideBanner.getData().getBanners()) {
+
+                            mBannerUrlList.add(banner.getImage_url());
+                        }
+                    }
+                    //  //设置广告头效果
+                    ConvenientBannerUtils.setBanner(mViewHolder.mHeaderBanner, mBannerUrlList);
+                }
+            }
+        });
     }
 
     @Override
@@ -84,25 +226,32 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
         mPtreLv.getRefreshableView().setAdapter(mExpandableAdapter);
 
         mPtreLv.getRefreshableView().setOnGroupClickListener(this);
+
+
+        mViewHolder.mHeaderRecyView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+
+        mRecyAdapter = new GuideRecyAdapter(getActivity(), mRecyList);
+
+        mViewHolder.mHeaderRecyView.setAdapter(mRecyAdapter);
     }
 
     @Override
     public void get(String result) {
 
-        PullList pull = JSONObject.parseObject(result, PullList.class);
+        GuideList pull = JSONObject.parseObject(result, GuideList.class);
 
         if (pull != null) {
 
-            List<PullList.DataEntity.ItemsEntity> itemList = pull.getData().getItems();
+            List<GuideList.DataEntity.ItemsEntity> itemList = pull.getData().getItems();
 
             if (itemList != null && itemList.size() > 0) {
                 for (int i = 0, size = itemList.size(); i < size; i++) {
 
-                    PullList.DataEntity.ItemsEntity item = itemList.get(i);
+                    GuideList.DataEntity.ItemsEntity item = itemList.get(i);
 
                     String key = formatDate(item.getPublished_at() * 1000L);
 
-                    List<PullList.DataEntity.ItemsEntity> itemsEntities = mItemMap.get(key);
+                    List<GuideList.DataEntity.ItemsEntity> itemsEntities = mItemMap.get(key);
 
                     if (itemsEntities != null) {
 
@@ -118,6 +267,7 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
 
                         mItemMap.put(key, itemsEntities);
                     }
+                    //设置默认展开
                     mPtreLv.getRefreshableView().expandGroup(i);
                 }
             }
@@ -126,29 +276,14 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
         }
     }
 
-
-    /**
-     * 从bundle中获取传值
-     */
-    private void getDataFromBundle() {
-
-        if (getArguments() != null) {
-
-            mId = getArguments().getInt(ID) + "";
-        }
-    }
-
     /**
      * 拼接url
      *
      * @return
      */
-    private String getUrl() {
+    private String getUrl(int offset) {
 
-        if (mId != null) {
-            return GuideConstant.HEADER_URL_GET + mId + GuideConstant.FOOTER_URL_GET;
-        }
-        return null;
+        return GuideConstant.HEADER_URL_GET + offset + GuideConstant.FOOTER_URL_GET;
     }
 
     /**
@@ -174,5 +309,15 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
     @Override
     public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
         return true;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        if (mViewHolder.mHeaderBanner != null) {
+            //停止轮播
+            mViewHolder.mHeaderBanner.stopTurning();
+        }
     }
 }

@@ -6,7 +6,7 @@
     <com.handmark.pulltorefresh.library.PullToRefreshExpandableListView
         android:id="@+id/ptrelistview_fragment_expandable"
         android:layout_width="match_parent"
-        android:divider="@null"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:divider="@null" />
 
 </RelativeLayout>

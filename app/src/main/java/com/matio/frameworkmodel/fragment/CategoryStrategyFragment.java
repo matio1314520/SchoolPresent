@@ -1,5 +1,7 @@
 package com.matio.frameworkmodel.fragment;
 
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ListView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -46,9 +48,9 @@ public class CategoryStrategyFragment extends BaseFragment implements HttpUtils.
     @Override
     public void onOperate() {
         //加载布局
-//        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_header_strategy, null);
-//
-//        mStrategyLv.addHeaderView(view);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_header_strategy, null);
+
+        mStrategyLv.addHeaderView(view);
     }
 
     @Override
@@ -59,7 +61,6 @@ public class CategoryStrategyFragment extends BaseFragment implements HttpUtils.
 
         mStrategyLv.setAdapter(mAdapter);
     }
-
 
     @Override
     public void get(String result) {

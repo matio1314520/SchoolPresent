@@ -1,5 +1,6 @@
 package com.matio.frameworkmodel.fragment;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.matio.frameworkmodel.R;
+import com.matio.frameworkmodel.activity.SearchActivity;
 import com.matio.frameworkmodel.adapter.GuidePagerAdapter;
 import com.matio.frameworkmodel.base.BaseFragment;
 
@@ -20,7 +22,7 @@ import java.util.ArrayList;
  * Created by Angel on 2016/2/19.
  */
 @ContentView(R.layout.fragment_category)
-public class CategoryFragment extends BaseFragment implements ViewPager.OnPageChangeListener  {
+public class CategoryFragment extends BaseFragment implements ViewPager.OnPageChangeListener {
 
 
     @ViewInject(R.id.viewpager_fragment_category)
@@ -85,9 +87,9 @@ public class CategoryFragment extends BaseFragment implements ViewPager.OnPageCh
     }
 
 
-
     @Event(R.id.search_fragment_guide)
     private void onClick(View view) {
-      //  startActivity(new Intent(getActivity(), SearchActivity.class));
+        //页面跳转
+        startActivity(new Intent(getActivity(), SearchActivity.class));
     }
 }

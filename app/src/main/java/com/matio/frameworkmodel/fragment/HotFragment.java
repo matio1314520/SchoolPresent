@@ -27,10 +27,9 @@ public class HotFragment extends BaseFragment {
     @Override
     public void onOperate() {
 
-
         getChildFragmentManager()
                 .beginTransaction()
-                .add(R.id.container_fragment_hot,GridFragment.newInstance())
+                .add(R.id.container_fragment_hot,GridFragment.newInstance(null))
                 .commit();
 
     }
