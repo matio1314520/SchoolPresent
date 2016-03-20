@@ -86,7 +86,6 @@ public class CategoryFragment extends BaseFragment implements ViewPager.OnPageCh
 
     }
 
-
     @Event(R.id.search_fragment_guide)
     private void onClick(View view) {
         //页面跳转

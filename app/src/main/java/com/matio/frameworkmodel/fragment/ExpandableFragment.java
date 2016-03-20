@@ -1,18 +1,21 @@
 package com.matio.frameworkmodel.fragment;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.listener.OnItemClickListener;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshExpandableListView;
 import com.matio.frameworkmodel.R;
+import com.matio.frameworkmodel.activity.CategoryChildActivity;
 import com.matio.frameworkmodel.adapter.ExpandableAdapter;
 import com.matio.frameworkmodel.adapter.GuideRecyAdapter;
 import com.matio.frameworkmodel.base.BaseFragment;
@@ -39,7 +42,7 @@ import java.util.Map;
  * Created by Angel on 2016/3/17.
  */
 @ContentView(R.layout.fragment_expandable)
-public class ExpandableFragment extends BaseFragment implements HttpUtils.Callback, ExpandableListView.OnGroupClickListener, PullToRefreshBase.OnRefreshListener2<ExpandableListView> {
+public class ExpandableFragment extends BaseFragment implements HttpUtils.Callback, ExpandableListView.OnGroupClickListener, PullToRefreshBase.OnRefreshListener2<ExpandableListView>, OnItemClickListener {
 
     @ViewInject(R.id.ptrelistview_fragment_expandable)
     private PullToRefreshExpandableListView mPtreLv;
@@ -66,13 +69,11 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
 
     private int ADD_OFFSET = 20;
 
+    private static final int BANNER_TURNING = 2 * 1000;
+
     public static ExpandableFragment newInstance() {
 
-        Bundle args = new Bundle();
-
         ExpandableFragment fragment = new ExpandableFragment();
-
-        fragment.setArguments(args);
 
         return fragment;
     }
@@ -80,7 +81,10 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
     @Override
     public void onOperate() {
 
+        //设置监听事件
         mPtreLv.setOnRefreshListener(this);
+
+        mViewHolder.mHeaderBanner.setOnItemClickListener(this);
 
         //加载头部布局
         mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_header_guide, null);
@@ -92,7 +96,7 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
 
         if (mViewHolder.mHeaderBanner != null) {
             //开始轮播
-            mViewHolder.mHeaderBanner.stopTurning();
+            mViewHolder.mHeaderBanner.startTurning(BANNER_TURNING);
         }
     }
 
@@ -131,6 +135,27 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
         START_OFFSET += ADD_OFFSET;
 
         requestListData(START_OFFSET);
+    }
+
+
+    /**
+     * banner点击事件
+     *
+     * @param position
+     */
+    @Override
+    public void onItemClick(int position) {
+
+        Toast.makeText(getActivity(), "" + position, Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getActivity(), CategoryChildActivity.class);
+
+        intent.putExtra("id",mBannerList.get(position).getId());
+
+        //http://api.liwushuo.com/v2/collections/227/posts?limit=20&offset=0
+        //http://api.liwushuo.com/v2/collections/225/posts?limit=20&offset=0
+
+        startActivity(intent);
     }
 
     private class ViewHolder {

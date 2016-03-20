@@ -44,6 +44,10 @@
 
         <activity android:name=".activity.SearchActivity" />
 
+        <activity android:name=".activity.CategoryChildActivity"/>
+
+        <activity android:name=".activity.StrategyDetailActivity"/>
+
     </application>
 
 </manifest>

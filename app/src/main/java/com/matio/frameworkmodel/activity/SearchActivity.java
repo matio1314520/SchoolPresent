@@ -3,6 +3,7 @@ package com.matio.frameworkmodel.activity;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -63,6 +64,8 @@ public class SearchActivity extends BaseActivity implements HttpUtils.Callback {
 
                 TextView wordTxt = new TextView(this);
 
+                Log.i("sss", "get: "+ hotWord);
+
                 wordTxt.setText(hotWord);
 
                 wordTxt.setBackground(getResources().getDrawable(R.drawable.hotword_activity_search));
@@ -78,6 +81,7 @@ public class SearchActivity extends BaseActivity implements HttpUtils.Callback {
             case R.id.back_activity_search:
                 finish();
                 break;
+
             case R.id.search_activity_search:
 
                 String content = mSearchEdt.getText().toString();

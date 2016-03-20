@@ -3,6 +3,7 @@ package com.matio.frameworkmodel.adapter;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.matio.frameworkmodel.R;
@@ -52,10 +53,23 @@ public class CategoryGiftRightAdapter extends BaseAppAdapter {
 
         viewHoler.contentGrid.setAdapter(adapter);
 
+        viewHoler.contentGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//                Intent intent = new Intent(mContext,);
+//
+//                intent.putExtra();
+//
+//                mContext.startActivity(intent);
+
+            }
+        });
+
         return convertView;
     }
 
-   private class ViewHoler {
+    private class ViewHoler {
 
         @ViewInject(R.id.name_item_right_gift)
         public TextView nameTxt;

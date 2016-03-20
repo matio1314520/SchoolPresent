@@ -1,12 +1,16 @@
 package com.matio.frameworkmodel.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshGridView;
 import com.matio.frameworkmodel.R;
+import com.matio.frameworkmodel.activity.GridDetailActivity;
 import com.matio.frameworkmodel.adapter.HotGridAdapter;
 import com.matio.frameworkmodel.base.BaseFragment;
 import com.matio.frameworkmodel.bean.HotGrid;
@@ -15,6 +19,7 @@ import com.matio.frameworkmodel.common.HotConstant;
 import com.matio.frameworkmodel.utils.HttpUtils;
 
 import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
@@ -101,6 +106,7 @@ public class GridFragment extends BaseFragment implements HttpUtils.Callback {
         refreshableView.setVerticalSpacing(VERTICAL_SPACING);
 
         refreshableView.setAdapter(mHotAdapter);
+
     }
 
     @Override
@@ -131,5 +137,24 @@ public class GridFragment extends BaseFragment implements HttpUtils.Callback {
                 mHotAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    @Event(value = R.id.ptregridview_fragment_grid, type = AdapterView.OnItemClickListener.class)
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Intent intent = new Intent(getActivity(), GridDetailActivity.class);
+
+        //GET http://api.liwushuo.com/v2/items/1042963
+
+        if (mKeyword != null) {
+
+            intent.putExtra("id", mItemList.get(position).getId());
+
+        } else {
+
+            intent.putExtra("id", mDataList.get(position).getId());
+        }
+
+        startActivity(intent);
     }
 }

@@ -1,6 +1,7 @@
 package com.matio.frameworkmodel.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.matio.frameworkmodel.R;
+import com.matio.frameworkmodel.activity.StrategyDetailActivity;
 import com.matio.frameworkmodel.bean.GuideRecycler;
 
 import org.xutils.view.annotation.ViewInject;
@@ -47,12 +49,12 @@ public class GuideRecyAdapter extends RecyclerView.Adapter<GuideRecyAdapter.View
             holder.iconView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//
-//                    Intent intent = new Intent(mContext, StrategyDetailActivity.class);
-//
-//                    intent.putExtra("url", banner.getWebp_url());
-//
-//                    mContext.startActivity(intent);
+
+                    Intent intent = new Intent(mContext, StrategyDetailActivity.class);
+
+                    intent.putExtra("url", banner.getWebp_url());
+
+                    mContext.startActivity(intent);
                 }
             });
         }

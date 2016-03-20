@@ -1,14 +1,18 @@
 package com.matio.frameworkmodel.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.matio.frameworkmodel.R;
+import com.matio.frameworkmodel.activity.LoginActivity;
+import com.matio.frameworkmodel.activity.StrategyDetailActivity;
 import com.matio.frameworkmodel.bean.GuideList;
 import com.matio.frameworkmodel.utils.HttpUtils;
 
@@ -22,7 +26,7 @@ import java.util.Map;
 /**
  * Created by Angel on 2016/3/17.
  */
-public class ExpandableAdapter extends BaseExpandableListAdapter {
+public class ExpandableAdapter extends BaseExpandableListAdapter implements View.OnClickListener {
 
     private Map<String, List<GuideList.DataEntity.ItemsEntity>> mItemMap;
 
@@ -31,6 +35,10 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     private Context mContext;
 
     private LayoutInflater mInflater;
+
+    private int mGroupPosition;
+
+    private int mChildPosition;
 
     public ExpandableAdapter(Context context, ArrayList<String> tilteList, Map<String, List<GuideList.DataEntity.ItemsEntity>> itemMap) {
         this.mItemMap = itemMap;
@@ -111,6 +119,10 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
+        mGroupPosition = groupPosition;
+
+        mChildPosition = childPosition;
+
         ChildViewHolder viewHolder = null;
 
         if (convertView == null) {
@@ -128,15 +140,20 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         if (mItemMap != null && mTilteList != null) {
 
-            GuideList.DataEntity.ItemsEntity item =  mItemMap.get(mTilteList.get(groupPosition)).get(childPosition);
+            GuideList.DataEntity.ItemsEntity item = mItemMap.get(mTilteList.get(groupPosition)).get(childPosition);
 
             if (item != null) {
 
-                HttpUtils.setImage(viewHolder.contentImg,item.getCover_image_url());
+                HttpUtils.setImage(viewHolder.contentImg, item.getCover_image_url());
+
 
                 viewHolder.favoriteTxt.setText("" + item.getLikes_count());
 
                 viewHolder.titleTxt.setText(item.getTitle());
+
+                viewHolder.contentImg.setOnClickListener(this);
+
+                viewHolder.favoriteLin.setOnClickListener(this);
             }
         }
         return convertView;
@@ -145,6 +162,31 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = null;
+
+        switch (v.getId()) {
+
+            case R.id.icon_item_ptrlistview:
+
+                intent = new Intent(mContext, StrategyDetailActivity.class);
+
+                intent.putExtra("ul", mItemMap.get(mTilteList.get(mGroupPosition)).get(mChildPosition).getContent_url());
+
+                break;
+
+            case R.id.favorite_item_ptrelistview:
+
+                intent = new Intent(mContext, LoginActivity.class);
+
+                break;
+        }
+
+        mContext.startActivity(intent);
     }
 
 
@@ -169,6 +211,10 @@ public class ExpandableAdapter extends BaseExpandableListAdapter {
 
         @ViewInject(R.id.favorite_item_ptrlistview)
         public TextView favoriteTxt;
+
+
+        @ViewInject(R.id.favorite_item_ptrelistview)
+        public LinearLayout favoriteLin;
 
         public ChildViewHolder(View convertView) {
             x.view().inject(this, convertView);

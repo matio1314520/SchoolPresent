@@ -57,7 +57,7 @@ public class GuideFragment extends BaseFragment implements HttpUtils.Callback {
      *
      * @param view
      */
-    @Event({R.id.signin_fragment_guide, R.id.changenight_fragment_guide, R.id.search_fragment_guide})
+    @Event({R.id.signin_fragment_guide, R.id.changenight_fragment_guide, R.id.search_fragment_guide, R.id.showall_fragment_guide})
     private void onClick(View view) {
 
         switch (view.getId()) {
@@ -75,6 +75,11 @@ public class GuideFragment extends BaseFragment implements HttpUtils.Callback {
             case R.id.search_fragment_guide:
                 //页面跳转
                 startActivity(new Intent(getActivity(), SearchActivity.class));
+
+                break;
+
+            case R.id.showall_fragment_guide:
+                //spinner  切换频道
 
                 break;
         }
