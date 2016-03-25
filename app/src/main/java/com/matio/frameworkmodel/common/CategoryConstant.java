@@ -10,7 +10,6 @@ public class CategoryConstant {
      */
     public static final String RECYCLER_URL_GET = "http://api.liwushuo.com/v2/collections?limit=10&offset=0";
 
-
     /**
      * 攻略 listview  品类
      */

@@ -16,6 +16,7 @@ import com.matio.frameworkmodel.activity.StrategyDetailActivity;
 import com.matio.frameworkmodel.bean.GuideList;
 import com.matio.frameworkmodel.utils.HttpUtils;
 
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
@@ -26,7 +27,9 @@ import java.util.Map;
 /**
  * Created by Angel on 2016/3/17.
  */
-public class ExpandableAdapter extends BaseExpandableListAdapter implements View.OnClickListener {
+public class ExpandableAdapter extends BaseExpandableListAdapter {
+
+    private static final String URL = "url";
 
     private Map<String, List<GuideList.DataEntity.ItemsEntity>> mItemMap;
 
@@ -35,10 +38,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter implements View
     private Context mContext;
 
     private LayoutInflater mInflater;
-
-    private int mGroupPosition;
-
-    private int mChildPosition;
 
     public ExpandableAdapter(Context context, ArrayList<String> tilteList, Map<String, List<GuideList.DataEntity.ItemsEntity>> itemMap) {
         this.mItemMap = itemMap;
@@ -119,10 +118,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter implements View
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        mGroupPosition = groupPosition;
-
-        mChildPosition = childPosition;
-
         ChildViewHolder viewHolder = null;
 
         if (convertView == null) {
@@ -146,14 +141,15 @@ public class ExpandableAdapter extends BaseExpandableListAdapter implements View
 
                 HttpUtils.setImage(viewHolder.contentImg, item.getCover_image_url());
 
-
                 viewHolder.favoriteTxt.setText("" + item.getLikes_count());
 
                 viewHolder.titleTxt.setText(item.getTitle());
 
-                viewHolder.contentImg.setOnClickListener(this);
+                viewHolder.contentImg.setTag(R.id.groupPosition, groupPosition);
+                viewHolder.contentImg.setTag(R.id.childPosition, childPosition);
 
-                viewHolder.favoriteLin.setOnClickListener(this);
+//                viewHolder.favoriteLin.setTag(R.id.groupPosition, groupPosition);
+//                viewHolder.favoriteLin.setTag(R.id.childPosition, childPosition);
             }
         }
         return convertView;
@@ -163,32 +159,6 @@ public class ExpandableAdapter extends BaseExpandableListAdapter implements View
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
-
-
-    @Override
-    public void onClick(View v) {
-        Intent intent = null;
-
-        switch (v.getId()) {
-
-            case R.id.icon_item_ptrlistview:
-
-                intent = new Intent(mContext, StrategyDetailActivity.class);
-
-                intent.putExtra("ul", mItemMap.get(mTilteList.get(mGroupPosition)).get(mChildPosition).getContent_url());
-
-                break;
-
-            case R.id.favorite_item_ptrelistview:
-
-                intent = new Intent(mContext, LoginActivity.class);
-
-                break;
-        }
-
-        mContext.startActivity(intent);
-    }
-
 
     private class ParentViewHolder {
 
@@ -220,5 +190,32 @@ public class ExpandableAdapter extends BaseExpandableListAdapter implements View
             x.view().inject(this, convertView);
         }
 
+        @Event(value = {R.id.icon_item_ptrlistview, R.id.favorite_item_ptrelistview})
+        private void onClick(View view) {
+
+            Intent intent = null;
+
+            switch (view.getId()) {
+
+                case R.id.icon_item_ptrlistview:
+
+                    Integer groupPosition = Integer.valueOf(view.getTag(R.id.groupPosition).toString());
+
+                    Integer childPosition = Integer.valueOf(view.getTag(R.id.childPosition).toString());
+
+                    intent = new Intent(mContext, StrategyDetailActivity.class);
+
+                    intent.putExtra(URL, mItemMap.get(mTilteList.get(groupPosition)).get(childPosition).getContent_url());
+
+                    break;
+
+                case R.id.favorite_item_ptrelistview:
+
+                    intent = new Intent(mContext, LoginActivity.class);
+
+                    break;
+            }
+            mContext.startActivity(intent);
+        }
     }
 }

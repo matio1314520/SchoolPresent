@@ -47,4 +47,9 @@
     <string name="loginshejiao">使用社交账号登录</string>
     <string name="me">我的</string>
 
+
+    <item name="groupPosition" type="id"></item>
+
+    <item name="childPosition" type="id"></item>
+
 </resources>

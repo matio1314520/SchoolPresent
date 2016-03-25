@@ -1,7 +1,6 @@
 package com.matio.frameworkmodel.fragment;
 
 import android.content.Intent;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,9 +81,9 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
     public void onOperate() {
 
         //设置监听事件
-        mPtreLv.setOnRefreshListener(this);
+      //  mPtreLv.setOnRefreshListener(this);
 
-        mViewHolder.mHeaderBanner.setOnItemClickListener(this);
+      //  mViewHolder.mHeaderBanner.setOnItemClickListener(this);
 
         //加载头部布局
         mHeaderView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_header_guide, null);
@@ -92,7 +91,7 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
         mViewHolder = new ViewHolder(mHeaderView);
 
         //添加头部
-        mPtreLv.getRefreshableView().addHeaderView(mHeaderView);
+      //  mPtreLv.getRefreshableView().addHeaderView(mHeaderView);
 
         if (mViewHolder.mHeaderBanner != null) {
             //开始轮播
@@ -101,7 +100,7 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
     }
 
     @Event(value = {R.id.ptrelistview_fragment_expandable}, type = AdapterView.OnItemClickListener.class)
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    private void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
     }
 
@@ -116,6 +115,7 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
         if (mTitleList != null && mItemMap != null) {
 
             mTitleList.clear();
+
             mItemMap.clear();
         }
 
@@ -179,18 +179,18 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
         requestListData(START_OFFSET);
 
         //请求banner数据
-        requestBannerData();
+     //   requestBannerData();
 
         //请求recyclerview数据
-        requestRecyclerData();
+    //    requestRecyclerData();
     }
 
     /**
      * 获取listview数据
      */
     private void requestListData(int offset) {
-        //PullToRefreshExpandableListView
-        HttpUtils.get(getUrl(offset), this);
+    //PullToRefreshExpandableListView
+       HttpUtils.get(getUrl(offset), this);
     }
 
     /**
@@ -242,7 +242,7 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
 
     @Override
     public void setAdapter() {
-        super.setAdapter();
+       super.setAdapter();
 
         mExpandableAdapter = new ExpandableAdapter(getActivity(), mTitleList, mItemMap);
 
@@ -253,11 +253,11 @@ public class ExpandableFragment extends BaseFragment implements HttpUtils.Callba
         mPtreLv.getRefreshableView().setOnGroupClickListener(this);
 
 
-        mViewHolder.mHeaderRecyView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+   //     mViewHolder.mHeaderRecyView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
 
-        mRecyAdapter = new GuideRecyAdapter(getActivity(), mRecyList);
+    //    mRecyAdapter = new GuideRecyAdapter(getActivity(), mRecyList);
 
-        mViewHolder.mHeaderRecyView.setAdapter(mRecyAdapter);
+     //   mViewHolder.mHeaderRecyView.setAdapter(mRecyAdapter);
     }
 
     @Override

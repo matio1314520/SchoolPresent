@@ -8,10 +8,10 @@ import java.util.List;
  */
 public class SearchGrid implements Serializable {
 
-
     private int code;
 
     private DataEntity data;
+
     private String message;
 
     public void setCode(int code) {
@@ -39,7 +39,6 @@ public class SearchGrid implements Serializable {
     }
 
     public static class DataEntity {
-
 
         private PagingEntity paging;
 

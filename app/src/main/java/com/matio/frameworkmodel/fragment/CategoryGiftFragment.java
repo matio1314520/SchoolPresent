@@ -1,6 +1,10 @@
 package com.matio.frameworkmodel.fragment;
 
+import android.graphics.Color;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.matio.frameworkmodel.R;
@@ -12,6 +16,7 @@ import com.matio.frameworkmodel.common.CategoryConstant;
 import com.matio.frameworkmodel.utils.HttpUtils;
 
 import org.xutils.view.annotation.ContentView;
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
@@ -26,7 +31,7 @@ public class CategoryGiftFragment extends BaseFragment implements HttpUtils.Call
     private ListView mLeftLV;
 
     @ViewInject(R.id.listview_right_category_gift)
-    private  ListView mRightLv;
+    private ListView mRightLv;
 
     private ArrayList<String> mNameList = new ArrayList<>();  // 左边listview数据源
 
@@ -78,5 +83,20 @@ public class CategoryGiftFragment extends BaseFragment implements HttpUtils.Call
             mSubList.addAll(giftData.getCategories());
         }
         mLeftAdapter.notifyDataSetChanged();
+    }
+
+    @Event(value = R.id.listview_left_category_gift, type = AdapterView.OnItemClickListener.class)
+    private void onLeftItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        TextView textView = (TextView) view.findViewById(R.id.name_item_category_gift);
+
+        if (view.isSelected()) {
+            textView.setTextColor(Color.RED);
+
+        } else {
+            textView.setTextColor(Color.GRAY);
+        }
+
+        mRightLv.setSelection(position);
     }
 }

@@ -48,6 +48,10 @@
 
         <activity android:name=".activity.StrategyDetailActivity"/>
 
+        <activity android:name=".activity.GridDetailActivity"/>
+
+        <activity android:name=".activity.WhichActivity"/>
+
     </application>
 
 </manifest>

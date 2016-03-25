@@ -52,7 +52,8 @@ public class SearchChildFragment extends BaseFragment {
 
         if (getArguments() != null) {
 
-                        String content = getArguments().getString("content");
+            String content = getArguments().getString("content");
+
             if (content != null) {
                 mKeyword = URLEncoder.encode(content);
             }
@@ -65,7 +66,7 @@ public class SearchChildFragment extends BaseFragment {
 
         titleList.add("攻略");
 
-        mFragmentList.add(GridFragment.newInstance(mKeyword));
+        mFragmentList.add(GridFragment.newInstance(mKeyword,null,null,null));
 
         mFragmentList.add(ListFragment.newInstance(0, mKeyword));
     }

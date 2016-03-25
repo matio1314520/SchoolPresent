@@ -1,16 +1,20 @@
 package com.matio.frameworkmodel.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.matio.frameworkmodel.R;
+import com.matio.frameworkmodel.activity.StrategyDetailActivity;
 import com.matio.frameworkmodel.base.BaseAppAdapter;
 import com.matio.frameworkmodel.bean.GuideList;
 import com.matio.frameworkmodel.bean.SearchList;
+import com.matio.frameworkmodel.utils.ComeFrom;
 
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
@@ -21,16 +25,18 @@ import java.util.List;
  */
 public class PullListAdapter extends BaseAppAdapter {
 
-    private boolean mYes;
+    public static final String URL = "url";
+
+    private ComeFrom mComeFrom;
 
     public PullListAdapter(Context context, List list) {
         super(context, list);
 
     }
 
-    public PullListAdapter(Context context, List list, boolean yes) {
+    public PullListAdapter(Context context, List list, ComeFrom comeFrom) {
         this(context, list);
-        this.mYes = yes;
+        this.mComeFrom = comeFrom;
     }
 
     @Override
@@ -50,7 +56,7 @@ public class PullListAdapter extends BaseAppAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (mYes) {
+        if (ComeFrom.SEARCH.equals(mComeFrom)) {
             SearchList.DataEntity.PostsEntity post = (SearchList.DataEntity.PostsEntity) mList.get(position);
 
             if (post != null) {
@@ -62,7 +68,9 @@ public class PullListAdapter extends BaseAppAdapter {
                 viewHolder.titleTxt.setText(post.getTitle());
             }
 
-        } else {
+        }
+
+        if (ComeFrom.GUIDE.equals(mComeFrom)) {
             if (mList != null) {
 
                 GuideList.DataEntity.ItemsEntity item = (GuideList.DataEntity.ItemsEntity) mList.get(position);
@@ -77,6 +85,9 @@ public class PullListAdapter extends BaseAppAdapter {
                 }
             }
         }
+
+        viewHolder.contentImg.setTag(position);
+
         return convertView;
     }
 
@@ -93,6 +104,16 @@ public class PullListAdapter extends BaseAppAdapter {
 
         public ViewHolder(View convertView) {
             x.view().inject(this, convertView);
+        }
+
+        @Event(R.id.icon_item_ptrlistview)
+        private void onClick(View view) {
+
+            Intent intent = new Intent(mContext, StrategyDetailActivity.class);
+
+            intent.putExtra(URL,  ((GuideList.DataEntity.ItemsEntity)mList.get(Integer.valueOf(view.getTag().toString()))).getUrl());
+
+            mContext.startActivity(intent);
         }
     }
 }

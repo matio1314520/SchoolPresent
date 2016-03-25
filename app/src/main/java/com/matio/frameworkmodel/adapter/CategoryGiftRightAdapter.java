@@ -1,16 +1,19 @@
 package com.matio.frameworkmodel.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.matio.frameworkmodel.R;
+import com.matio.frameworkmodel.activity.WhichActivity;
 import com.matio.frameworkmodel.base.BaseAppAdapter;
 import com.matio.frameworkmodel.bean.CategoryGift;
 import com.matio.frameworkmodel.widget.CustomGridView;
 
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
@@ -51,20 +54,9 @@ public class CategoryGiftRightAdapter extends BaseAppAdapter {
 
         CategoryGiftGridAdapter adapter = new CategoryGiftGridAdapter(mContext, categories.getSubcategories());
 
+        viewHoler.contentGrid.setTag(position);
+
         viewHoler.contentGrid.setAdapter(adapter);
-
-        viewHoler.contentGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                Intent intent = new Intent(mContext,);
-//
-//                intent.putExtra();
-//
-//                mContext.startActivity(intent);
-
-            }
-        });
 
         return convertView;
     }
@@ -78,7 +70,20 @@ public class CategoryGiftRightAdapter extends BaseAppAdapter {
         public CustomGridView contentGrid;
 
         public ViewHoler(View view) {
+
             x.view().inject(this, view);
+        }
+
+        @Event(value = R.id.gridview_item_right_gift, type = AdapterView.OnItemClickListener.class)
+        private void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            Intent intent = new Intent(mContext, WhichActivity.class);
+
+            Integer groupPosition = Integer.valueOf(contentGrid.getTag().toString());
+
+            intent.putExtra("id", ((CategoryGift.CategoryGiftData.CategoryGiftCategories) mList.get(groupPosition)).getSubcategories().get(position).getId());
+
+            mContext.startActivity(intent);
         }
     }
 }

@@ -21,15 +21,11 @@ public class GuideConstant {
     public static final String RECYCLER_URL_GET = "http://api.liwushuo.com/v2/secondary_banners?gender=1&generation=4";
 
     /**
-     * PullToRefreshListView
+     * PullToRefreshExpandableListView
      */
-    public static final String HEADER_URL_GET = "http://api.liwushuo.com/v2/channels/108/items?limit=20&offset=";
+    public static final String HEADER_URL_GET = "http://api.liwushuo.com/v2/channels/108/items?limit=20&ad=2&gender=1&offset=";
 
 
-    public static final String FOOTER_URL_GET = "&gender=1&generation=4";
-
-    //http://api.liwushuo.com/v2/channels/108/items?limit=20&ad=2&gender=1&offset=20&generation=4
-    //http://api.liwushuo.com/v2/channels/108/items?limit=20&ad=2&gender=1&offset=40&generation=4
-    //http://api.liwushuo.com/v2/channels/108/items?limit=20&ad=2&gender=1&offset=60&generation=4
+    public static final String FOOTER_URL_GET = "&generation=4";
 
 }

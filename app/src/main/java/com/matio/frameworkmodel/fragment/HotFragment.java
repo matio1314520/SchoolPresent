@@ -26,11 +26,10 @@ public class HotFragment extends BaseFragment {
 
     @Override
     public void onOperate() {
-
+        //131568751
         getChildFragmentManager()
                 .beginTransaction()
-                .add(R.id.container_fragment_hot,GridFragment.newInstance(null))
+                .add(R.id.container_fragment_hot, GridFragment.newInstance(null, null,null,null))
                 .commit();
-
     }
 }

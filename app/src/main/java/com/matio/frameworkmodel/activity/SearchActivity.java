@@ -1,9 +1,11 @@
 package com.matio.frameworkmodel.activity;
 
 import android.annotation.TargetApi;
+import android.graphics.Color;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -64,9 +66,9 @@ public class SearchActivity extends BaseActivity implements HttpUtils.Callback {
 
                 TextView wordTxt = new TextView(this);
 
-                Log.i("sss", "get: "+ hotWord);
-
                 wordTxt.setText(hotWord);
+
+                wordTxt.setTextColor(Color.BLACK);
 
                 wordTxt.setBackground(getResources().getDrawable(R.drawable.hotword_activity_search));
 
@@ -75,9 +77,22 @@ public class SearchActivity extends BaseActivity implements HttpUtils.Callback {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+
     @Event({R.id.back_activity_search, R.id.search_activity_search})
     private void onClick(View view) {
         switch (view.getId()) {
+
             case R.id.back_activity_search:
                 finish();
                 break;
@@ -88,7 +103,7 @@ public class SearchActivity extends BaseActivity implements HttpUtils.Callback {
 
                 if (!TextUtils.isEmpty(content)) {
 
-                    mSearchLin.setVisibility(View.GONE);
+                    mSearchLin.setVisibility(View.INVISIBLE);
 
                     getSupportFragmentManager()
                             .beginTransaction()

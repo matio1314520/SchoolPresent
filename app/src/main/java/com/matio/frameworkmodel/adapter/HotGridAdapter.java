@@ -8,9 +8,12 @@ import android.widget.TextView;
 
 import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.base.BaseAppAdapter;
+import com.matio.frameworkmodel.bean.GiftGrid;
 import com.matio.frameworkmodel.bean.HotGrid;
 import com.matio.frameworkmodel.bean.SearchGrid;
+import com.matio.frameworkmodel.utils.ComeFrom;
 
+import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
@@ -21,15 +24,15 @@ import java.util.List;
  */
 public class HotGridAdapter extends BaseAppAdapter {
 
-    private boolean mYes;
+    private ComeFrom mWhichOne;
 
     public HotGridAdapter(Context context, List list) {
         super(context, list);
     }
 
-    public HotGridAdapter(Context context, List list, boolean yes) {
+    public HotGridAdapter(Context context, List list, ComeFrom whichOne) {
         this(context, list);
-        this.mYes = yes;
+        this.mWhichOne = whichOne;
     }
 
     @Override
@@ -42,66 +45,85 @@ public class HotGridAdapter extends BaseAppAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+        String imageUrl = null;
+
+        String webUrl = null;
+
+        String price = null;
+
+        String name = null;
+
+        String favorites_count = null;
 
         if (mList != null) {
 
-            if (mYes) {
+            if (ComeFrom.SEARCH.equals(mWhichOne)) {
 
                 SearchGrid.DataEntity.ItemsEntity data = (SearchGrid.DataEntity.ItemsEntity) mList.get(position);
 
                 if (data != null) {
-                    viewHolder.priceTxt.setText(data.getPrice());
 
-                    viewHolder.nameTxt.setText(data.getName());
+                    webUrl = data.getCover_webp_url();
 
-                    String favorites_count = data.getFavorites_count();
-
-                    int fc = Integer.parseInt(favorites_count);
-
-                    if (fc < 1000) {
-
-                        viewHolder.loveTxt.setText(favorites_count);
-
-                    } else {
-
-                        viewHolder.loveTxt.setText(fc / 100 / 10 + "." + fc / 100 % 10 + "k");
-                    }
-
-                    x.image().bind(viewHolder.iconImg, data.getCover_image_url());
-                }
-
-            } else {
-                HotGrid.HotDataEntity.HotItems.HotData data = (HotGrid.HotDataEntity.HotItems.HotData) mList.get(position);
-                if (data != null) {
-                    viewHolder.priceTxt.setText(data.getPrice());
-
-                    viewHolder.nameTxt.setText(data.getName());
-
-                    String favorites_count = data.getFavorites_count();
-
-                    int fc = Integer.parseInt(favorites_count);
-
-                    if (fc < 1000) {
-
-                        viewHolder.loveTxt.setText(favorites_count);
-
-                    } else {
-
-                        viewHolder.loveTxt.setText(fc / 100 / 10 + "." + fc / 100 % 10 + "k");
-                    }
-
-                    x.image().bind(viewHolder.iconImg, data.getCover_image_url());
+                    price = data.getPrice();
+                    name = data.getName();
+                    favorites_count = data.getFavorites_count();
+                    imageUrl = data.getCover_image_url();
                 }
 
             }
+            if (ComeFrom.HOT.equals(mWhichOne) ||(ComeFrom.DETAIL.equals(mWhichOne))) {
+                HotGrid.HotDataEntity.HotItems.HotData data = (HotGrid.HotDataEntity.HotItems.HotData) mList.get(position);
+                if (data != null) {
+
+                    webUrl = data.getUrl();
+
+                    price = data.getPrice();
+                    name = data.getName();
+                    favorites_count = data.getFavorites_count();
+                    imageUrl = data.getCover_image_url();
+                }
+
+            }
+            if (ComeFrom.GIFT.equals(mWhichOne)) {
+
+                GiftGrid.DataEntity.ItemsEntity gift = (GiftGrid.DataEntity.ItemsEntity) mList.get(position);
+
+                if (gift != null) {
+                    webUrl = gift.getUrl();
+
+                    price = gift.getPrice();
+                    name = gift.getName();
+                    favorites_count = gift.getFavorites_count();
+
+                    imageUrl = gift.getCover_image_url();
+                }
+            }
+
+
+            viewHolder.priceTxt.setText(price);
+
+            viewHolder.nameTxt.setText(name);
+
+            int fc = Integer.parseInt(favorites_count);
+
+            if (fc < 1000) {
+
+                viewHolder.loveTxt.setText(favorites_count);
+
+            } else {
+
+                viewHolder.loveTxt.setText(fc / 100 / 10 + "." + fc / 100 % 10 + "k");
+            }
+
+            x.image().bind(viewHolder.iconImg, imageUrl);
+
+            viewHolder.iconImg.setTag(webUrl);
         }
         return convertView;
     }
 
-    /**
-     *
-     */
-    class ViewHolder {
+    private class ViewHolder {
         @ViewInject(R.id.icon_item_fragment_hot)
         public ImageView iconImg;
 
@@ -117,6 +139,17 @@ public class HotGridAdapter extends BaseAppAdapter {
         public ViewHolder(View convertView) {
             x.view().inject(this, convertView);
         }
-    }
 
+
+        @Event(value = R.id.icon_item_fragment_hot)
+        private void onClick(View view) {
+//            Intent intent = new Intent(mContext, StrategyDetailActivity.class);
+//
+//            Log.i("sssss", "onClick: " + view.getTag().toString());
+//
+//            intent.putExtra("url", view.getTag().toString());
+//
+//            mContext.startActivity(intent);
+        }
+    }
 }

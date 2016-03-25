@@ -80,7 +80,6 @@ public class HotGrid  implements Serializable{
 
             private String type;
 
-
             public void setData(HotData data) {
                 this.data = data;
             }
@@ -107,7 +106,7 @@ public class HotGrid  implements Serializable{
 
                 private String cover_image_url;
 
-                private int created_at;
+                private long created_at;
 
                 private String description;
 
@@ -247,7 +246,7 @@ public class HotGrid  implements Serializable{
                     return cover_image_url;
                 }
 
-                public int getCreated_at() {
+                public long getCreated_at() {
                     return created_at;
                 }
 

@@ -20,10 +20,10 @@ import java.util.List;
 
 /**
  * Created by Angel on 2016/2/13.
- * <p/>
+ * <p>
  * 分类--》攻略---》listview适配器
  */
-public class CategoryStrategyListAdapter extends BaseAppAdapter implements AdapterView.OnItemClickListener {
+public class CategoryStrategyListAdapter extends BaseAppAdapter {
 
 
     private CategoryStrategy.CategoryDataEntity.CategoryChannelGroups mGroupList;
@@ -35,7 +35,7 @@ public class CategoryStrategyListAdapter extends BaseAppAdapter implements Adapt
     }
 
     @Override
-    public View getItemView(int position, View convertView, ViewGroup parent) {
+    public View getItemView(final int position, View convertView, ViewGroup parent) {
         ViewHoler viewHoler = null;
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item_listivew_strategy_category, parent, false);
@@ -54,21 +54,20 @@ public class CategoryStrategyListAdapter extends BaseAppAdapter implements Adapt
 
         viewHoler.contentGrid.setAdapter(adapter);
 
-        viewHoler.contentGrid.setOnItemClickListener(this);
+        viewHoler.contentGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int subPosition, long id) {
+
+                Intent intent = new Intent(mContext, CategoryChildActivity.class);
+
+                intent.putExtra("id", ((CategoryStrategy.CategoryDataEntity.CategoryChannelGroups) mList.get(position)).getChannels().get(subPosition).getId());
+
+                mContext.startActivity(intent);
+            }
+        });
 
         return convertView;
     }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int subPosition, long id) {
-
-        Intent intent = new Intent(mContext, CategoryChildActivity.class);
-
-        intent.putExtra("id", mGroupList.getChannels().get(subPosition).getId());
-
-        mContext.startActivity(intent);
-    }
-
 
 
     private class ViewHoler {

@@ -10,7 +10,7 @@ import com.matio.frameworkmodel.adapter.PullListAdapter;
 import com.matio.frameworkmodel.base.BaseFragment;
 import com.matio.frameworkmodel.bean.GuideList;
 import com.matio.frameworkmodel.bean.SearchList;
-import com.matio.frameworkmodel.common.GuideConstant;
+import com.matio.frameworkmodel.utils.ComeFrom;
 import com.matio.frameworkmodel.utils.HttpUtils;
 
 import org.xutils.view.annotation.ContentView;
@@ -69,26 +69,23 @@ public class ListFragment extends BaseFragment implements HttpUtils.Callback {
     public void requestNetData() {
         super.requestNetData();
 
-        if (mKeyword != null) {
-            HttpUtils.get("http://api.liwushuo.com/v2/search/post?limit=20&offset=0&sort=&keyword=" + mKeyword, this);
-
-        } else {
-
             HttpUtils.get(getUrl(), this);
-        }
     }
-
 
     @Override
     public void setAdapter() {
         super.setAdapter();
 
-        if (mKeyword != null){
+        //search
+        if (mKeyword != null && mId == null) {
 
-            mListAdapter = new PullListAdapter(getActivity(), mItemList,true);
-        }else {
+            mListAdapter = new PullListAdapter(getActivity(), mItemList, ComeFrom.SEARCH);
+        }
 
-            mListAdapter = new PullListAdapter(getActivity(), mItemList);
+        //guide
+        if (mKeyword == null && mId != null) {
+
+            mListAdapter = new PullListAdapter(getActivity(), mItemList, ComeFrom.GUIDE);
 
             mPtrLv.setMode(PullToRefreshBase.Mode.BOTH);
 
@@ -116,15 +113,25 @@ public class ListFragment extends BaseFragment implements HttpUtils.Callback {
      */
     private String getUrl() {
 
-        if (mId != null) {
-            return GuideConstant.HEADER_URL_GET + mId + GuideConstant.FOOTER_URL_GET;
+        //guide
+        if (mId != null && mKeyword == null) {
+
+            return "http://api.liwushuo.com/v2/channels/" + mId + "/items?limit=20&offset=0&gender=1&generation=4";
         }
+
+        //search
+        if (mId == null && mKeyword != null){
+
+            return "http://api.liwushuo.com/v2/search/post?limit=20&offset=0&sort=&keyword=" + mKeyword;
+        }
+
         return null;
     }
 
     @Override
     public void get(String result) {
-        if (mKeyword != null) {
+
+        if (mKeyword != null && mId == null) {
 
             SearchList search = JSONObject.parseObject(result, SearchList.class);
 
@@ -132,8 +139,9 @@ public class ListFragment extends BaseFragment implements HttpUtils.Callback {
 
                 mPostList.addAll(search.getData().getPosts());
             }
+        }
 
-        } else {
+        if (mKeyword == null && mId != null) {
 
             GuideList guide = JSONObject.parseObject(result, GuideList.class);
 

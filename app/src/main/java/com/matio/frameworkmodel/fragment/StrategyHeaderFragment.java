@@ -77,7 +77,9 @@ public class StrategyHeaderFragment extends BaseFragment implements HttpUtils.Ca
     public void onClick(View v) {
 
         Intent intent = new Intent(getActivity(), CategoryChildActivity.class);
+
         intent.putExtra("id", mId);
+
         startActivity(intent);
     }
 }

@@ -41,6 +41,10 @@ public class CategoryChildActivity extends BaseActivity {
                 break;
 
             case R.id.show_activity_categorychild:
+
+                //分享
+
+
                 break;
         }
     }

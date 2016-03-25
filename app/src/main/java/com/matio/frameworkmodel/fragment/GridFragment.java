@@ -2,6 +2,7 @@ package com.matio.frameworkmodel.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -13,9 +14,12 @@ import com.matio.frameworkmodel.R;
 import com.matio.frameworkmodel.activity.GridDetailActivity;
 import com.matio.frameworkmodel.adapter.HotGridAdapter;
 import com.matio.frameworkmodel.base.BaseFragment;
+import com.matio.frameworkmodel.bean.CommentGrid;
+import com.matio.frameworkmodel.bean.GiftGrid;
 import com.matio.frameworkmodel.bean.HotGrid;
 import com.matio.frameworkmodel.bean.SearchGrid;
 import com.matio.frameworkmodel.common.HotConstant;
+import com.matio.frameworkmodel.utils.ComeFrom;
 import com.matio.frameworkmodel.utils.HttpUtils;
 
 import org.xutils.view.annotation.ContentView;
@@ -32,7 +36,7 @@ import java.util.List;
 public class GridFragment extends BaseFragment implements HttpUtils.Callback {
 
     @ViewInject(R.id.ptregridview_fragment_grid)
-    private PullToRefreshGridView mPtreGiv;
+    private PullToRefreshGridView mPtrGiv;
 
     private HotGridAdapter mHotAdapter;
 
@@ -46,15 +50,35 @@ public class GridFragment extends BaseFragment implements HttpUtils.Callback {
 
     private ArrayList<SearchGrid.DataEntity.ItemsEntity> mItemList = new ArrayList<>();
 
+    private ArrayList<GiftGrid.DataEntity.ItemsEntity> mGiftList = new ArrayList<>();
+
+    private ArrayList<HotGrid.HotDataEntity.HotItems.HotData> mDetailList = new ArrayList<>();
+
     private String mKeyword;
+
+    private String mId;
+
+    private String mUrl;
+
+    private String mHtml;
 
     private static final String KEYWORD = "keyword";
 
-    public static GridFragment newInstance(String keyword) {
+    private static final String ID = "id";
+
+    private static final String URL = "url";
+
+    public static GridFragment newInstance(String keyword, String id, String url, String html) {
 
         Bundle args = new Bundle();
 
         args.putString(KEYWORD, keyword);
+
+        args.putString(ID, id);
+
+        args.putString(URL, url);
+
+        args.putString("html", html);
 
         GridFragment fragment = new GridFragment();
 
@@ -66,38 +90,88 @@ public class GridFragment extends BaseFragment implements HttpUtils.Callback {
     @Override
     public void onOperate() {
 
+        if (getArguments() != null) {
+
+            mKeyword = getArguments().getString(KEYWORD);
+
+            mId = getArguments().getString(ID);
+
+            mUrl = getArguments().getString(URL);
+
+            mHtml = getArguments().getString("html");
+        }
     }
 
     @Override
     public void requestNetData() {
         super.requestNetData();
 
-        if (mKeyword != null) {
+        HttpUtils.get(getUrl(), this);
+    }
 
-            HttpUtils.get("http://api.liwushuo.com/v2/search/item?limit=20&offset=0&sort=&keyword=" + mKeyword, this);
+    private String getUrl() {
 
-        } else {
+        if (mUrl == null && mHtml == null) {
+            //搜索界面
+            if (mKeyword != null && mId == null) {
 
-            HttpUtils.get(HotConstant.GRID_URL_GET, this);
+                return "http://api.liwushuo.com/v2/search/item?limit=20&offset=0&sort=&keyword=" + mKeyword;
+            }
+
+            //热门界面
+            if (mKeyword == null && mId == null) {
+
+                return HotConstant.GRID_URL_GET;
+            }
+
+            //礼物界面
+            if (mKeyword == null && mId != null) {
+
+                return "http://api.liwushuo.com/v2/item_subcategories/" + mId + "/items?limit=20&offset=0";
+            }
         }
+
+        if (mUrl != null) {
+
+            return mUrl;
+        }
+
+        //gridfragment
+        if (mHtml != null && mId != null) {
+            return "http://api.liwushuo.com/v2%2Fitems%2F" + mId + "%2Frecommend";
+        }
+
+        return null;
     }
 
     @Override
     public void setAdapter() {
         super.setAdapter();
 
-        if (mKeyword != null) {
 
-            mHotAdapter = new HotGridAdapter(getActivity(), mDataList, true);
+        if (mHtml == null) {
+            if (mKeyword != null && mId == null && mUrl == null) {
 
-        } else {
+                mHotAdapter = new HotGridAdapter(getActivity(), mDataList, ComeFrom.SEARCH);
+            }
 
-            mHotAdapter = new HotGridAdapter(getActivity(), mDataList);
+            if (mKeyword == null && mId == null && mUrl == null) {
 
-            mPtreGiv.setMode(PullToRefreshBase.Mode.BOTH);
+                mHotAdapter = new HotGridAdapter(getActivity(), mDataList, ComeFrom.HOT);
+
+                mPtrGiv.setMode(PullToRefreshBase.Mode.BOTH);
+            }
+
+            if (mUrl != null || mKeyword == null && mId != null) {
+
+                mHotAdapter = new HotGridAdapter(getActivity(), mGiftList, ComeFrom.GIFT);
+            }
+        }else {
+
+            mHotAdapter = new HotGridAdapter(getActivity(), mDetailList, ComeFrom.DETAIL);
         }
 
-        GridView refreshableView = mPtreGiv.getRefreshableView();
+        GridView refreshableView = mPtrGiv.getRefreshableView();
 
         refreshableView.setNumColumns(NUM_COLUMN);
 
@@ -105,54 +179,97 @@ public class GridFragment extends BaseFragment implements HttpUtils.Callback {
 
         refreshableView.setVerticalSpacing(VERTICAL_SPACING);
 
-        refreshableView.setAdapter(mHotAdapter);
+        if (mHtml != null) {
 
+//            WebView webView = new WebView(getActivity());
+//
+//            WebSettings webSettings = webView.getSettings();
+//
+//            webSettings.setJavaScriptEnabled(true);
+//
+//            webView.loadData(mHtml, "text/html", "UTF-8");
+        }
+
+        refreshableView.setAdapter(mHotAdapter);
     }
 
     @Override
     public void get(String result) {
 
-        if (mKeyword != null) {
+        if (mHtml == null) {
 
-            SearchGrid gridCom = JSONObject.parseObject(result, SearchGrid.class);
+            if (mKeyword != null && mId == null && mUrl == null) {
 
-            if (gridCom != null) {
+                SearchGrid gridCom = JSONObject.parseObject(result, SearchGrid.class);
 
-                mItemList.addAll(gridCom.getData().getItems());
+                if (gridCom != null) {
 
-                mHotAdapter.notifyDataSetChanged();
+                    mItemList.addAll(gridCom.getData().getItems());
+                }
+            }
+
+            if (mKeyword == null && mId == null && mUrl == null) {
+
+                HotGrid hotGrid = JSONObject.parseObject(result, HotGrid.class);
+
+                if (hotGrid != null) {
+
+                    List<HotGrid.HotDataEntity.HotItems> hotItemsList = hotGrid.getData().getItems();
+
+                    for (HotGrid.HotDataEntity.HotItems items : hotItemsList) {
+
+                        mDataList.add(items.getData());
+                    }
+                }
+            }
+
+            if (mUrl != null || mKeyword == null && mId != null) {
+
+                GiftGrid giftGrid = JSONObject.parseObject(result, GiftGrid.class);
+
+                if (giftGrid != null) {
+
+                    mGiftList.addAll(giftGrid.getData().getItems());
+                }
             }
         } else {
 
-            HotGrid hotGrid = JSONObject.parseObject(result, HotGrid.class);
+            CommentGrid commentGrid = JSONObject.parseObject(result, CommentGrid.class);
 
-            if (hotGrid != null) {
+            if (commentGrid != null) {
 
-                List<HotGrid.HotDataEntity.HotItems> hotItemsList = hotGrid.getData().getItems();
-
-                for (HotGrid.HotDataEntity.HotItems items : hotItemsList) {
-
-                    mDataList.add(items.getData());
-                }
-                mHotAdapter.notifyDataSetChanged();
+                mDetailList.addAll(commentGrid.getData().getRecommend_items());
             }
         }
+        mHotAdapter.notifyDataSetChanged();
     }
 
     @Event(value = R.id.ptregridview_fragment_grid, type = AdapterView.OnItemClickListener.class)
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    private void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         Intent intent = new Intent(getActivity(), GridDetailActivity.class);
 
-        //GET http://api.liwushuo.com/v2/items/1042963
+        if (mHtml == null) {
 
-        if (mKeyword != null) {
+            if (mKeyword != null && mId == null && mUrl == null) {
 
-            intent.putExtra("id", mItemList.get(position).getId());
+                intent.putExtra(ID, mItemList.get(position).getId());
+            }
 
-        } else {
+            if (mKeyword == null && mId == null && mUrl == null) {
+                //1013058
+                Log.i("ssss", "onItemClick: "+ mDataList.get(position).getId());
 
-            intent.putExtra("id", mDataList.get(position).getId());
+                intent.putExtra(ID, mDataList.get(position).getId());
+            }
+
+            if (mKeyword == null && mId != null) {
+
+                intent.putExtra(ID, mGiftList.get(position).getId());
+            }
+        }else {
+
+            intent.putExtra(ID,mDetailList.get(position).getId());
         }
 
         startActivity(intent);
